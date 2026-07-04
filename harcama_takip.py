@@ -1,6 +1,6 @@
 import json
 import matplotlib.pyplot as plt
-
+import pandas as pd
 harcamalar = []
 
 def harcama_ekle():
@@ -30,6 +30,18 @@ def kategori_toplamlari():
             toplamlar[kategori] = tutar
     return toplamlar
 
+
+def pandas_analiz():
+    df = pd.DataFrame(harcamalar)
+    
+    print("\n--- Kategoriye Göre Toplam ---")
+    print(df.groupby("kategori")["tutar"].sum())
+    
+    print("\n--- En Yüksek Harcama ---")
+    print(df.loc[df["tutar"].idxmax()])
+    
+    print("\n--- Ortalama Harcama ---")
+    print(df["tutar"].mean())
 
 def grafik_ciz():
     toplamlar = kategori_toplamlari()
@@ -62,7 +74,8 @@ while True:
     print("2. Harcamaları Göster")
     print("3. Toplamı Göster")
     print("4. Grafik Göster")
-    print("5. Çıkış")
+    print("5. Pandas Analiz")
+    print("6. Çıkış")
     
     secim = input("Seçiminiz: ")
     
@@ -75,6 +88,8 @@ while True:
     elif secim == "4":
         grafik_ciz()
     elif secim == "5":
+        pandas_analiz()
+    elif secim == "6":
         verileri_kaydet()
         print("Görüşürüz!")
         break
