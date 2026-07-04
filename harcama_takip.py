@@ -1,4 +1,5 @@
 import json
+import matplotlib.pyplot as plt
 
 harcamalar = []
 
@@ -18,6 +19,27 @@ def toplam_hesapla():
         toplam = toplam + harcama["tutar"]
     print("Toplam harcama:", toplam, "TL")
 
+def kategori_toplamlari():          
+    toplamlar = {}
+    for harcama in harcamalar:
+        kategori = harcama["kategori"]
+        tutar = harcama["tutar"]
+        if kategori in toplamlar:
+            toplamlar[kategori] = toplamlar[kategori] + tutar
+        else:
+            toplamlar[kategori] = tutar
+    return toplamlar
+
+
+def grafik_ciz():
+    toplamlar = kategori_toplamlari()
+    kategoriler = list(toplamlar.keys())
+    tutarlar = list(toplamlar.values())
+    
+    plt.pie(tutarlar, labels=kategoriler, autopct="%1.1f%%")
+    plt.title("Kategoriye Göre Harcama Dağılımı")
+    plt.show()
+
 def verileri_kaydet():
     with open("harcamalar.json", "w") as dosya:
         json.dump(harcamalar, dosya)
@@ -30,12 +52,17 @@ def verileri_yukle():
     except FileNotFoundError:
         harcamalar = []
 
+
 verileri_yukle()
+verileri_yukle()
+print(kategori_toplamlari())  
+
 while True:
     print("\n1. Harcama Ekle")
     print("2. Harcamaları Göster")
     print("3. Toplamı Göster")
-    print("4. Çıkış")
+    print("4. Grafik Göster")
+    print("5. Çıkış")
     
     secim = input("Seçiminiz: ")
     
@@ -46,6 +73,8 @@ while True:
     elif secim == "3":
         toplam_hesapla()
     elif secim == "4":
+        grafik_ciz()
+    elif secim == "5":
         verileri_kaydet()
         print("Görüşürüz!")
         break
